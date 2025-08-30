@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Textile Mending Data Logging system</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<style type="text/css">
+    body {
+        background-image: url("../images/bg.png");
+        background-size: cover;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+        font-size: 35px;
+        margin: 50px 0;
+    }
+
+    
+    .container {
+        display: flex;
+        justify-content: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    body {
+    background-image: url("../images/bg.png");
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+.wrapper {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
+}
+
+/* Table Styling */
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.05); /* semi-transparent background */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px;
+    text-align: center;
+    color: white;
+}
+
+th {
+    background: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Button Styling */
+.btn1 {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 30px;
+    background: black;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn1:hover {
+    background: #0d6efd; /* Bootstrap blue style */
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Logout Button (top-right) */
+header {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.btn-logout {
+    padding: 8px 18px;
+    background: black;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.btn-logout:hover {
+    background: #e63946;
+    color: white;
+}
+
+/* Contact Section */
+.contact-block {
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+}
+
+.contact-info h3 {
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.contact-info p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #ddd;
+}
+
+</style>
+
+<body>
+<div class="wrapper">
+    <h1>Textile Mending Data Logging Automation System</h1>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Loom Number</th>
+                    <th>Fabric Quality</th>
+                    <th>Fabric Length (m)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Table rows will be added dynamically using JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Link to the View Report page -->
+    <a href="report.html" class="btn1">View Report</a>
+
+    <!-- <div class="contact-block">
+        <div class="contact-info">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-phone"></i> Phone: +91 8421702051</p>
+            <p><i class="fas fa-envelope"></i> Email: mending.data@gmail.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> Address: Ichalkaranji, Kolhapur-416 115<br> Maharashtra</p>
+        </div>
+       
+    </div> -->
+
+    <header>
+        <a href="login1.html" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </header>
+</div>
+
+<script>
+    // Function to fetch and populate the last five readings from ThingSpeak
+    function populateTableWithThingSpeakData() {
+        // Replace with your ThingSpeak Channel ID and API Key
+        const channelID = '2297390';
+        const apiKey = 'IVJFF51YVIM8TU6O';
+
+        // Make a GET request to ThingSpeak API to fetch the last five readings
+        fetch(`https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${apiKey}&results=5`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
+
+                data.feeds.forEach(feed => {
+                    const loomNumber = feed.field1;
+                    const fabricQuality = feed.field2;
+                    const fabricLength = feed.field3;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${loomNumber}</td>
+                        <td>${fabricQuality}</td>
+                        <td>${fabricLength}</td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data from ThingSpeak:', error);
+            });
+    }
+
+    // Populate the table with ThingSpeak data when the page loads
+    populateTableWithThingSpeakData();
+</script>
+</body>
+</html>

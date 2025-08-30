@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Signup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("../images/login.jpg");
+      background-size: cover;
+    }
+    .container {
+      width: 300px;
+      margin: auto;
+      margin-top: 65px;
+      padding: 20px;
+      background-color: transparent;
+      border-radius: 20px;
+      box-shadow: -3px -4px 45px rgba(37,196,188,0.993);
+    }
+    h1 {
+      text-align: center;
+      color: aqua;
+      font-size: 45px;
+      margin-top: 50px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: aqua;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      color: aqua;
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 93%;
+      background-color: transparent;
+      padding: 8px;
+      color: white;
+      font-weight: bold;
+      border: 1px solid aqua;
+      border-radius: 3px;
+    }
+    .form-group input[type="submit"] {
+      background-color: #0c9bfa;
+      width: 70px;
+      margin-left: 100px;
+      color: black;
+      cursor: pointer;
+    }
+    .form-group input[type="submit"]:hover {
+      background-color: #06daf7;
+      box-shadow: -3px -4px 40px rgba(52,243,4,0.932);
+    }
+    .error-message {
+      color: red;
+      font-size: 12px;
+      text-align: center;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 10px;
+      color: white;
+      font-size: 12px;
+    }
+    .switch a {
+      color: aqua;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .switch a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>MENDING DATA LOGGER</h1>
+  <div class="container">
+    <h2>Sign Up</h2>
+    <form onsubmit="event.preventDefault(); signupUser();">
+      <div class="form-group">
+        <label for="signupEmail">Email:</label>
+        <input type="email" id="signupEmail" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Password:</label>
+        <input type="password" id="signupPassword" placeholder="Enter your password" required>
+      </div>
+      <div class="form-group">
+        <label for="signupConfirm">Retype Password:</label>
+        <input type="password" id="signupConfirm" placeholder="Re-enter your password" required>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Sign Up">
+        <div class="error-message" id="signup-error"></div>
+      </div>
+    </form>
+    <div class="switch">
+      Already have an account? <a href="login1.html">Login</a>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBxlEFykzust8p51EIpaPRfcpKlFCpaU1E",
+      authDomain: "data-logging-automation-system.firebaseapp.com",
+      projectId: "data-logging-automation-system",
+      storageBucket: "data-logging-automation-system.appspot.com",
+      messagingSenderId: "32869832904",
+      appId: "1:32869832904:web:c156976a28253b0d2fadfd",
+      measurementId: "G-QNW5JV6LW5"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Signup function
+    function signupUser() {
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+      const confirmPass = document.getElementById("signupConfirm").value;
+      const errorDiv = document.getElementById("signup-error");
+
+      errorDiv.innerText = ""; // Clear previous errors
+
+      // Password match check
+      if (password !== confirmPass) {
+        errorDiv.innerText = "❌ Passwords do not match!";
+        return;
+      }
+
+      // Create user with Firebase
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          // Success: redirect to login1.html
+          errorDiv.style.color = "green";
+          errorDiv.innerText = "✅ Signup successful! Redirecting to login...";
+          setTimeout(() => {
+            window.location.replace("login1.html");
+          }, 1000); // 1 second delay
+        })
+        .catch((error) => {
+          errorDiv.style.color = "red";
+          errorDiv.innerText = "❌ " + error.message;
+        });
+    }
+    function signupUser() {
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+  const confirmPass = document.getElementById("signupConfirm").value;
+  const errorDiv = document.getElementById("signup-error");
+
+  errorDiv.innerText = ""; // Clear previous errors
+
+  if (password !== confirmPass) {
+    errorDiv.innerText = "❌ Passwords do not match!";
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      // Redirect to your login page after successful signup
+      window.location.href = "login.html"; // <-- your login file
+    })
+    .catch((error) => {
+      errorDiv.innerText = "❌ " + error.message;
+    });
+}
+
+  </script>
+</body>
+</html>

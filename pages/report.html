@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Report</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .wrapper {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header {
+            color: white;
+            background-color: #007bff;
+            padding: 20px;
+        }
+
+        .report-content {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .btn1,
+        .btn2 {
+            display: inline-block;
+            margin-right: 10px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            position: static;
+        }
+
+        #footer {
+            text-align: center;
+            padding: 10px;
+            color: rgb(14, 13, 13);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <h1>View Generated Report</h1>
+        </div>
+
+        <div class="report-content">
+            <h2>Generated Report</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Loom Number</th>
+                        <th>Fabric Quality</th>
+                        <th>Fabric Length</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Table rows will be added dynamically using JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <a href="#" class="btn1" id="downloadBtn">Download Report</a>
+        <button class="btn2" id="printBtn">Print</button>
+
+        
+
+    <script>
+        function populateTable(data) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.loomNumber}</td>
+                    <td>${item.fabricQuality}</td>
+                    <td>${item.fabricLength}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Fetch data from ThingSpeak and populate the table
+        const apiKey = 'KZ0L2N5ADD1VDZCW';
+        const channelID = '2297390';
+        const fieldNumberLoom = 1; // Replace with the field number for Loom Number
+        const fieldNumberQuality = 2; // Replace with the field number for Fabric Quality
+        const fieldNumberLength = 3; // Replace with the field number for Fabric Length
+
+        let channelData; // Declare a variable to store the channel data
+
+        fetch(`https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${apiKey}`)
+            .then(response => response.json())
+            .then(data => {
+                const feeds = data.feeds;
+                channelData = feeds.map(feed => ({
+                    loomNumber: feed.field1,
+                    fabricQuality: feed.field2,
+                    fabricLength: feed.field3
+                }));
+                populateTable(channelData);
+            })
+            .catch(error => {
+                console.error('Error fetching data from ThingSpeak:', error);
+            });
+
+        const downloadBtn = document.getElementById('downloadBtn');
+        downloadBtn.addEventListener('click', () => {
+            if (channelData) {
+                // Prepare the CSV data
+                const csvData = 'Loom Number,Fabric Quality,Fabric Length\n' +
+                    channelData.map(item =>
+                        `${item.loomNumber},${item.fabricQuality},${item.fabricLength}`
+                    ).join('\n');
+
+                const blob = new Blob([csvData], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'report.csv';
+                link.click();
+            }
+        });
+
+        const printBtn = document.getElementById('printBtn');
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+    </script>
+</body>
+
+</html>

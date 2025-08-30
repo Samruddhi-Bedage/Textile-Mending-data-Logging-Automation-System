@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Textile Project - Home</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* Background image */
+    body {
+      background: url('../images/bg.png') no-repeat center center/cover;
+    }
+
+    /* Overlay for readability */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    nav .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #00d4ff;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+
+    nav ul li {
+      margin-left: 30px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 1em;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #00d4ff;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 70px);
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      color: #ddd;
+      max-width: 600px;
+    }
+
+    .hero button {
+      text-decoration: none;  
+      padding: 12px 25px;
+      font-size: 1em;
+      border: none;
+      border-radius: 25px;
+      background: #00d4ff;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .hero button:hover {
+      background: #00a3cc;
+    }
+    .button  {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Data Logger</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Welcome to the "Data Logging System"</h1>
+    <p>No more manual counts, no more errors. With sensor-driven data logging and HMI integration, managing fabric rolls is now effortless and precise for admins.</p>
+    <button>
+  <a href="login1.html" style="text-decoration: none; color: inherit;">Get Started</a>
+</button>
+
+  </section>
+</body>
+</html>

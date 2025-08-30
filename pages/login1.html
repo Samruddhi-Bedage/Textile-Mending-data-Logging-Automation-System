@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-image: url("../images/login.jpg"); background-size: cover; }
+    .container { width: 300px; margin: auto; margin-top: 65px; padding: 20px; background-color: transparent; border-radius: 20px; box-shadow: -3px -4px 45px rgba(37,196,188,0.993); }
+    h1 { text-align: center; color: aqua; font-size: 45px; margin-top: 50px; margin-bottom: 20px; }
+    h2 { text-align: center; color: aqua; margin-bottom: 20px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { color: aqua; display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input { width: 93%; background-color: transparent; padding: 8px; color: white; font-weight: bold; border: 1px solid aqua; border-radius: 3px; }
+    .form-group input[type="submit"] { background-color: #0c9bfa; width: 70px; margin-left: 100px; color: black; cursor: pointer; }
+    .form-group input[type="submit"]:hover { background-color: #06daf7; box-shadow: -3px -4px 40px rgba(52,243,4,0.932); }
+    .switch { text-align: center; margin-top: 10px; color: white; font-size: 12px; }
+    .switch a { color: aqua; cursor: pointer; text-decoration: none; }
+    .switch a:hover { text-decoration: underline; }
+
+    .message { text-align:center; font-size:12px; margin-top:8px; }
+    .message.error { color:#ff6b6b; }
+    .message.info  { color:#8be9fd; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <h1>MENDING DATA LOGGER</h1>
+  <div class="container">
+    <h2>Login</h2>
+    <form onsubmit="event.preventDefault(); loginUser();">
+      <div class="form-group">
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+      </div>
+      <div class="form-group">
+        <input type="submit" id="loginBtn" value="Login">
+        <div id="login-message" class="message hidden" aria-live="polite"></div>
+      </div>
+    </form>
+    <div class="switch">Don’t have an account? <a href="signup.html">Sign Up</a></div>
+    <div class="switch"><a href="forgot.html">Forgot Password?</a></div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBxlEFykzust8p51EIpaPRfcpKlFCpaU1E",
+      authDomain: "data-logging-automation-system.firebaseapp.com",
+      projectId: "data-logging-automation-system",
+      storageBucket: "data-logging-automation-system.appspot.com",
+      messagingSenderId: "32869832904",
+      appId: "1:32869832904:web:c156976a28253b0d2fadfd",
+      measurementId: "G-QNW5JV6LW5"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const ERROR_MAP = {
+      "auth/invalid-email": "Please enter a valid email address.",
+      "auth/user-disabled": "Your account is disabled. Contact support.",
+      "auth/too-many-requests": "Too many attempts. Try again later or reset your password.",
+      "auth/network-request-failed": "Network error. Check your connection and try again.",
+      "auth/internal-error": "Something went wrong. Please try again.",
+      // Use the same text for these to avoid account enumeration:
+      "auth/user-not-found": "Invalid email or password.",
+      "auth/wrong-password": "Invalid email or password.",
+      "auth/invalid-credential": "Invalid email or password."
+    };
+
+    function showMessage(type, text) {
+      const el = document.getElementById("login-message");
+      el.className = "message " + type;
+      el.textContent = text;   // safe text (no HTML)
+      if (!text) el.classList.add("hidden"); else el.classList.remove("hidden");
+    }
+
+    async function loginUser() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const btn = document.getElementById("loginBtn");
+
+      showMessage("", "");                // clear message
+      btn.disabled = true;
+      const prevLabel = btn.value;
+      btn.value = "Logging in...";
+
+      try {
+        const cred = await auth.signInWithEmailAndPassword(email, password);
+
+        // (Optional) enforce email verification:
+        // if (!cred.user.emailVerified) {
+        //   await auth.signOut();
+        //   showMessage("info", "Please verify your email. We just sent you a new verification link.");
+        //   return;
+        // }
+
+        window.location.href = "index.html";
+      } catch (error) {
+        // Log technical details for developers, but show a friendly message to users.
+        console.error("[Login error]", error.code, error.message);
+
+        const friendly = ERROR_MAP[error.code] || "Sign-in failed. Please try again.";
+        // Add a gentle hint to reset password for credential issues
+        const showResetHint = ["auth/wrong-password","auth/user-not-found","auth/invalid-credential"].includes(error.code);
+        showMessage("error", showResetHint ? (friendly + " You can use “Forgot Password?”.") : friendly);
+      } finally {
+        btn.disabled = false;
+        btn.value = prevLabel;
+      }
+    }
+  </script>
+</body>
+</html>
