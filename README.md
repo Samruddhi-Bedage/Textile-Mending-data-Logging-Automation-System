@@ -63,5 +63,3 @@ This project aims to **automate the data logging system** using sensors, Human M
 
 ---
 
-## 📊 System Overview (Block Diagram)
-
